@@ -48,3 +48,5 @@ redis>=2.10.5
 
 
 # Your custom requirements go here
+django-bootstrap4==0.0.4
+selenium==3.8.1
