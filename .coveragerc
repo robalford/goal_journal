@@ -1,0 +1,5 @@
+[run]
+include = goal_journal/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
