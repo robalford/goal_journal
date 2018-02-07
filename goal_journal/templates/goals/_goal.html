@@ -1,0 +1,5 @@
+<li class="list-group-item">
+    <a href="{% url 'goals:goal_detail' goal.id %}"><h4>{{ goal }}</h4></a>
+    <p>{% for category in goal.categories.all %}<a href="{% url 'goals:category' category.id %}"><span class="badge badge-info">{{ category }}</span></a> {% endfor %}</p>
+    {% if goal.target_date %}<p class="text-muted"><i class="far fa-calendar-check"></i> {{ goal.target_date }}</p>{% endif %}
+</li>

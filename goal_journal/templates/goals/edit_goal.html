@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<form method="post" action="">{% csrf_token %}
+    <div class="card mb-4">
+      <div class="card-header">
+          <h3 class="card-title pt-2">{% if edit %}Edit goal{% else %}Set a new goal for yourself{% endif %}</h3>
+          {% bootstrap_field goal_form.goal placeholder='' show_label=False %}
+      </div>
+      <div class="card-body">
+        <h5 class="card-text mb-2">Target date:</h5>
+        <div class="form-group">
+            <label class="sr-only" for="id_target_date">Target date</label>
+            <input class="form-control datepicker" id="id_target_date" name="target_date" placeholder="Ongoing" {% if goal.target_date %}value="{{ goal.target_date|date:"SHORT_DATE_FORMAT" }}"{% endif %}type="text" data-provide="datepicker">
+        </div>
+        <br>
+        <h5 class="card-text mb-2">Categories:</h5>
+        <div id="category-field">
+        {% bootstrap_field goal_form.categories show_label=False %}
+        </div>
+        <!-- Button trigger category modal -->
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newCategoryModal">
+          Create new category
+        </button>
+        <br><br>
+        <h5 class="card-text mt-3">Actions</h5>
+        <p>What actions will you take to achieve your goal?</p>
+        <div id="action-forms">
+        {% bootstrap_formset action_formset show_label=False  %}
+        </div>
+    </div>
+      <div class="card-header">
+        {% if edit %}
+        <!-- Button trigger delete action modal -->
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteGoalModal">
+          Delete Goal
+        </button>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">
+            {% if edit %}Edit Goal{% else %}Create Goal{% endif %}
+        </button>
+      </div>
+    </div>
+</form>
+
+<!-- Category Modal -->
+<div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog" aria-labelledby="newCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create new category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="{% url 'goals:new_category' %}" id="new-category-form">{% csrf_token %}
+      <div class="modal-body">
+            {% bootstrap_form category_form show_label=False %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-modal-button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if edit %}
+<!-- Delete Action Modal -->
+<div class="modal fade" id="deleteGoalModal" tabindex="-1" role="dialog" aria-labelledby="deleteGoalModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Goal</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            Are you sure you want to delete the goal '{{ goal }}' and all of its action log data?
+      </div>
+      <div class="modal-footer">
+        <form method="post" action="{% url 'goals:delete_goal' pk=goal.pk %}">{% csrf_token %}
+        <button type="button" id="close-modal-button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">Delete Goal</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock content %}
+
+{% block javascript %}{{ block.super }}
+<script>
+$(function () {
+    // initialize datepicker widget
+    $('.datepicker').datepicker();
+    // Submit new category form via AJAX from modal
+    $('#new-category-form').on('submit', function (e) {
+        e.preventDefault();
+        var categoryForm = $('#new-category-form').serialize();
+        $.post('{% url 'goals:new_category' %}', categoryForm, function(data) {
+            $('#category-field').html(data['category_field']);
+            $('#id_categories').val(data['new_category_id']);
+            $('#form-alerts').html(function() {
+                   return '<div class="alert alert-success">You create a new category for ' + data['new_category'] + '</div>';
+            });
+        });
+        $("#close-modal-button").click();
+    });
+});
+</script>
+{% endblock %}

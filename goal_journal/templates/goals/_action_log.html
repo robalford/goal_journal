@@ -1,0 +1,16 @@
+<h5 class="card-title">Action Log</h5>
+{% if not action_log %}<p>It's time to log your first actions!</p>{% endif %}
+<ul class="list-group mb-4 action-log-list">
+    {% if action_log %}
+    {% for action_recorded in action_log %}
+        <li class="list-group-item">
+            <span class="badge badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span>
+            <br>
+            {{ action_recorded.status_logged }}
+            <br>
+            <a href="{% url 'goals:manage_action' goal_pk=goal.pk action_pk=action_recorded.action.pk %}">{{ action_recorded.action }}</a>
+        </li>
+    {% endfor %}
+    <li class="list-group-item"><a href="{% url 'goals:action_log_list' goal_pk=goal.id %}">View all actions &raquo;</a></li>
+    {% endif %}
+</ul>

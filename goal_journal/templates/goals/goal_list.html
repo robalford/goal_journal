@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <h3>{% if category %}{{ category }}{% else %}All{% endif %} goals</h3>
+    <a class="btn btn-info" href="{% url 'goals:new_goal' %}" role="button">Set a new goal</a>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div id="goal-list-filters" class="d-md-flex justify-content-md-between align-items-md-center mt-4 mt-md-0">
+            <ul class="nav nav-pills my-4 my-md-0 mr-md-auto" id="pills-tab" role="tablist">
+                {% if current_goals %}
+                <li class="nav-item">
+                    <a class="nav-link active small-pill" id="pills-current-tab" data-toggle="pill" href="#pills-current" role="tab" aria-controls="pills-current" aria-selected="true">Current</a>
+                </li>
+                {% endif %}
+                {% if achieved_goals %}
+                <li class="nav-item">
+                    <a class="nav-link small-pill" id="pills-achieved-tab" data-toggle="pill" href="#pills-achieved" role="tab" aria-controls="pills-acheived" aria-selected="false">Achieved</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Category
+                </a>
+                <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                  <a class="dropdown-item" href="{% url 'goals:goal_list' %}">All</a>
+                  {% if categories %}
+                  {% for goal_category in categories %}
+                  <a class="dropdown-item" href="{% url 'goals:category' goal_category.id %}">{{ goal_category }}</a>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+              </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="card">
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-current" role="tabpanel" aria-labelledby="pills-current-tab">
+            <ul class="list-group list-group-flush">
+            {% for goal in current_goals %}
+                {% include 'goals/_goal.html' with goal=goal %}
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="tab-pane fade" id="pills-achieved" role="tabpanel" aria-labelledby="pills-achieved-tab">
+          <ul class="list-group list-group-flush">
+            {% for goal in achieved_goals %}
+                {% include 'goals/_goal.html' with goal=goal %}
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

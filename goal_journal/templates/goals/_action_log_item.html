@@ -1,0 +1,7 @@
+<li class="list-group-item">
+    <span class="badge badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span>
+    <br>
+    {{ action_recorded.status_logged }}
+    <br>
+    <a href="{% url 'goals:manage_action' goal_pk=goal.pk action_pk=action_recorded.action.pk %}">{{ action_recorded.action }}</a>
+</li>
