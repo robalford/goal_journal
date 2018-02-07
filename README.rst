@@ -1,7 +1,9 @@
 Goal Journal
 ============
 
-A Django app for setting and tracking goals
+.. image:: docs/images/landing_page.png
+
+A Django web application for setting and tracking personal goals.
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
@@ -10,6 +12,35 @@ A Django app for setting and tracking goals
 
 :License: MIT
 
+
+Requirements
+------------
+
+* Python 3.6
+* Django 1.11
+* Postgres 9.2 +
+
+Installation
+-------------
+
+1) Clone this repo
+
+2) Create and activate a `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_ for your installation.
+
+3) Install the project requirements::
+
+    $ pip install -r requirements/local.txt
+
+4) Create a local Postgres database::
+
+    $ createdb goal_journal
+
+5) Run Django migrations and run the local development server::
+
+    $ python manage.py migrate
+    $ python manage.py runserver
+
+6) Point your browser to `http://127.0.0.1:8000/` to get started
 
 Settings
 --------
@@ -48,6 +79,16 @@ Running tests with py.test
 
   $ py.test
 
+Install Geckodriver for Selenium
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Selenium tests require a browser-specific `driver <http://selenium-python.readthedocs.io/installation.html#drivers>`_ .
+You can download Geckodriver for Firefox `here <https://github.com/mozilla/geckodriver/releases>`_.
+
+Then add to PATH by running this command from your downloads folder::
+
+    `$ mv geckodriver /usr/local/bin`
+
 Live reloading and Sass CSS compilation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -55,14 +96,34 @@ Moved to `Live reloading and SASS compilation`_.
 
 .. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
 
+Usage
+^^^^^
 
+Set goals for yourself
 
+.. image:: docs/images/new_goal.png
 
+Take action to achieve your goals
+
+.. image:: docs/images/goal_detail.png
+
+Keep a journal
+
+.. image:: docs/images/journal_entry.png
+
+Track your historical progress
+
+.. image:: docs/images/action_log.png
+
+Works great on mobile
+
+.. image:: docs/images/mobile.png
 
 Deployment
 ----------
 
-The following details how to deploy this application.
+Follow these `instructions <http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-pythonanywhere.html>`_
+to deploy and host your installation online with a free `PythonAnywhere <https://www.pythonanywhere.com>`_ account.
 
 
 
