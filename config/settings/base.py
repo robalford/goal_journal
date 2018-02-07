@@ -57,6 +57,7 @@ LOCAL_APPS = [
     'goal_journal.users.apps.UsersConfig',
     # Your stuff: custom apps go here
     'goal_journal.goals',
+    'goal_journal.journal',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
