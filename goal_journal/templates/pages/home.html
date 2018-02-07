@@ -1,1 +1,13 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load static %}
+{% block full_width %}
+<div class="jumbotron jumbotron-fluid home-page-jumbotron">
+  <img src="{% static "images/joshua-earle-14603.jpg" %}" class="img-fluid" alt="Person jumping over mountains">
+  <div class="container home-page-container">
+    <h1 class="display-4">My Goal Journal</h1>
+    <p class="lead">Set goals. Track your progress. Realize your full potential.</p>
+    <p class="lead">
+    <a class="btn btn-outline-light btn-lg" href="{% url 'account_signup' %}" role="button">Get started</a>
+  </p>
+  </div>
+</div>
+{% endblock %}
