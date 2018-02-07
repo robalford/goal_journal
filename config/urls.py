@@ -17,7 +17,8 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
-
+    url(r'^goals/', include('goal_journal.goals.urls', namespace='goals')),
+    url(r'^goal-journal/', include('goal_journal.journal.urls', namespace='journal')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
