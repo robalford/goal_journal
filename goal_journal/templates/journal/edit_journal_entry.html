@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<form method="post" action="">{% csrf_token %}
+    <div id="form-alerts">
+        {% bootstrap_messages %}
+    </div>
+    <div class="card mb-4">
+      <div class="card-header">
+          <h3 class="card-title pt-2">Edit journal entry for {{ entry.goal }}</h3>
+      </div>
+      <div class="card-body">
+          <h5 class="card-text">{{ entry.date_of_entry }}</h5>
+          {% bootstrap_field entry_form.goal %}
+          {% bootstrap_field entry_form.progress show_label=False %}
+          <!-- Button trigger delete action modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteEntryModal">
+              Delete Entry
+            </button>
+          <button type="submit" class="btn btn-primary">
+            Save Entry
+          </button>
+      </div>
+    </div>
+</form>
+
+<!-- Delete Entry Modal -->
+<div class="modal fade" id="deleteEntryModal" tabindex="-1" role="dialog" aria-labelledby="deleteEntryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Entry</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            Are you sure you want to delete the entry from {{ entry.date_of_entry }} for {{ entry.goal }}?
+      </div>
+      <div class="modal-footer">
+        <form method="post" action="{% url 'journal:delete_entry' entry_pk=entry.id %}">{% csrf_token %}
+        <button type="button" id="close-modal-button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger" >Delete Entry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

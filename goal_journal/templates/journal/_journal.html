@@ -1,0 +1,31 @@
+{% load bootstrap4 %}
+<h5 class="card-title">Progress Journal <a href="#" data-toggle="modal" data-target="#newEntryModal"><i class="far fa-plus-square"></i></a></h5>
+<!-- Journal entry modal -->
+<div class="modal fade" id="newEntryModal" tabindex="-1" role="dialog" aria-labelledby="newEntryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="entryModalLabel">Progress Journal for {% now 'M d\, Y' %}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3 class="card-title pt-2">Journal Entry</h3>
+        <form method="post" action="{% url 'journal:new_entry' %}">{% csrf_token %}
+            {% bootstrap_field entry_form.goal %}
+            {% bootstrap_field entry_form.progress show_label=False %}
+            <button type="submit" class="btn btn-primary btn-sm">Save Journal Entry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% if goal.entry_set.count %}
+{% for entry in goal.entry_set.all %}
+    <a href="{% url 'journal:edit_entry' entry_pk=entry.pk %}"><h3 class="card-title pt-2">{{ entry.date_of_entry }}</h3></a>
+    {{ entry.progress|linebreaks }}
+{% endfor %}
+{% else %}
+Click on the plus icon above to create your first entry in your progress journal.
+{% endif %}
