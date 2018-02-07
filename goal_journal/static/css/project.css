@@ -11,3 +11,142 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+.badge-info {
+  color: #fff;
+  background-color: #17a2b8a1;
+}
+
+/* Display django-debug-toolbar.
+   See https://github.com/django-debug-toolbar/django-debug-toolbar/issues/742
+   and https://github.com/pydanny/cookiecutter-django/issues/317
+*/
+[hidden][style="display: block;"] {
+  display: block !important;
+}
+
+/* Custom CSS */
+
+body {
+  background-color: #A0DDE5;
+}
+
+a {
+  color: rgba(0,0,0,.9);
+}
+
+a.danger {
+  color: #dc3545;
+}
+
+a.success {
+  color: #42A129;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #54C968;
+    border-color: #7BDF8C;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.badge-info {
+  color: #fff;
+  background-color: #17a2b8a1;
+}
+
+/* Cards */
+
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    border: 1px solid rgba(0,0,0,.08);
+}
+
+/* Lists */
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    margin-bottom: -1px;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.list-group-item:last-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Navs */
+
+.bg-dark {
+  background-color: #44a2b1!important;
+}
+
+.bg-light {
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+/* Pills */
+
+.small-pill {
+    font-size: 14px;
+    padding: .5rem;
+}
+
+/* Goal list nav for filters */
+
+#goal-list-filters {
+  width: 100%;
+}
+
+/* Home page */
+
+.home-page-jumbotron {
+  background-color: #252425;
+  padding-top: 0;
+}
+
+.home-page-container {
+  background-color: #252425;
+  color: white;
+}
+
+.home-page-container a:hover {
+  color: black;
+}
+
+@media (min-width:992px) {
+  .home-page-container {
+    margin-top: -250px;
+    background-color: transparent;
+  }
+}
+
