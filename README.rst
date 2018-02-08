@@ -42,6 +42,29 @@ Installation
 
 6) Point your browser to `http://127.0.0.1:8000/` to get started
 
+Usage
+-----
+
+Set goals for yourself
+
+.. image:: docs/images/new_goal.png
+
+Take action to achieve your goals
+
+.. image:: docs/images/goal_detail.png
+
+Keep a goal journal
+
+.. image:: docs/images/journal_entry.png
+
+Track your progress
+
+.. image:: docs/images/action_log.png
+
+Works great on mobile
+
+.. image:: docs/images/mobile.png
+
 Settings
 --------
 
@@ -95,29 +118,6 @@ Live reloading and Sass CSS compilation
 Moved to `Live reloading and SASS compilation`_.
 
 .. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
-
-Usage
-^^^^^
-
-Set goals for yourself
-
-.. image:: docs/images/new_goal.png
-
-Take action to achieve your goals
-
-.. image:: docs/images/goal_detail.png
-
-Keep a goal journal
-
-.. image:: docs/images/journal_entry.png
-
-Track your progress
-
-.. image:: docs/images/action_log.png
-
-Works great on mobile
-
-.. image:: docs/images/mobile.png
 
 Deployment
 ----------
