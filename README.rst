@@ -87,7 +87,7 @@ You can download Geckodriver for Firefox `here <https://github.com/mozilla/gecko
 
 Then add to PATH by running this command from your downloads folder::
 
-    `$ mv geckodriver /usr/local/bin`
+    $ mv geckodriver /usr/local/bin
 
 Live reloading and Sass CSS compilation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -107,11 +107,11 @@ Take action to achieve your goals
 
 .. image:: docs/images/goal_detail.png
 
-Keep a journal
+Keep a goal journal
 
 .. image:: docs/images/journal_entry.png
 
-Track your historical progress
+Track your progress
 
 .. image:: docs/images/action_log.png
 
