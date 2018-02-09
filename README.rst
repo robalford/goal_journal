@@ -57,10 +57,6 @@ Keep a goal journal
 
 .. image:: docs/images/journal_entry.png
 
-Track your progress
-
-.. image:: docs/images/action_log.png
-
 Works great on mobile
 
 .. image:: docs/images/mobile.png
