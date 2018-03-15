@@ -1,67 +1,23 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block content %}
-<div class="mb-4 d-flex justify-content-between align-items-center">
-    <h3>Progress journal</h3>
-    <a class="btn btn-info" href="#" data-toggle="modal" data-target="#newEntryModal" role="button">New entry</a>
-</div>
-<!-- Journal entry modal -->
-<div class="modal fade" id="newEntryModal" tabindex="-1" role="dialog" aria-labelledby="newEntryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="entryModalLabel">Progress Journal for {% now 'M d\, Y' %}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3 class="card-title pt-2">Journal Entry</h3>
-        <form method="post" action="{% url 'journal:new_entry' %}">{% csrf_token %}
-            {% bootstrap_field entry_form.goal %}
-            {% bootstrap_field entry_form.progress show_label=False %}
-            <button type="submit" class="btn btn-primary btn-sm">Save Journal Entry</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
+<h3>Goal Journal</h3>
+<hr>
 <div class="card">
-  <div class="card-header d-flex justify-content-between">
-      <h3 class="card-title">All entries</h3>
-      <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="goalDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Goal
-            </a>
-            <div class="dropdown-menu" aria-labelledby="goalDropdown">
-              <a class="dropdown-item" href="{% url 'journal:goal_journal' %}">All</a>
-              {% if goals %}
-              {% for goal in goals %}
-                  {% if goal.entry_set.count %}
-                    <a class="dropdown-item" href="{% url 'journal:goal_filter' goal.id %}">{{ goal }}</a>
-                  {% endif %}
-              {% endfor %}
-              {% endif %}
-            </div>
-          </li>
-        </ul>
-      </div>
-
     <ul class="list-group list-group-flush">
     {% if entries %}
     {% for entry in entries %}
         <li class="list-group-item">
         <a href="{% url 'goals:goal_detail' entry.goal.id %}"><h4>{{ entry.goal }}</h4></a>
-        <h5 class="card-title pt-2">{{ entry.date_of_entry }} <a href="{% url 'journal:edit_entry' entry_pk=entry.pk %}"><i class="far fa-edit"></i></a></h5>
+        <h5 class="text-muted pt-2">{{ entry.date_of_entry }} <a href="{% url 'journal:edit_entry' entry_pk=entry.pk %}"><i class="far fa-edit"></i></a></h5>
         {{ entry.progress|linebreaks }}
         </li>
     {% endfor %}
     {% else %}
-        <li class="list-group-item">Create your first journal.</li>
+        <li class="list-group-item">Return to your <a href="{% url 'goals:goal_list' %}">goal list</a> and select a goal to create your first entry in your goal journal</li>
     {% endif %}
     </ul>
+    {% if entries.count > 10 %}
     <div class="card-footer">
         <nav aria-label="Page navigation">
             <ul class="pagination d-flex justify-content-between mx-3">
@@ -82,5 +38,6 @@
             </ul>
         </nav>
     </div>
+    {% endif %}
 </div>
 {% endblock content %}

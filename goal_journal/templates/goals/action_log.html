@@ -2,28 +2,21 @@
 {% load bootstrap4 %}
 {% block content %}
 <h3><a href="{% url 'goals:goal_detail' goal_pk=goal.id %}">{{ goal }}</a></h3>
-<br>
+<hr>
 <div class="card">
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-              <th scope="col">Time</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for action_recorded in action_log %}
-            <tr>
-              <th class="w-25" scope="row">{{ action_recorded.status_logged }}</th>
-              <td class="w-20"><h3><span class="badge badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span></h3></td>
-              <td class="w-55">{{ action_recorded.action }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul class="list-group list-group-flush">
+        {% for action_recorded in action_log %}
+        <li class="list-group-item">
+            <strong><a href="{% url 'goals:manage_action' goal_pk=goal.id action_pk=action_recorded.action.id %}">{{ action_recorded.action }}</a></strong><br>
+            <span class="badge badge-pill badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span>
+            {{ action_recorded.status_logged|date:"D. M. d, Y P" }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if action_log.has_next %}
     <nav aria-label="Page navigation">
-        <ul class="pagination d-flex justify-content-between mx-3">
+        <ul class="pagination d-flex justify-content-between my-2 mx-3">
             <li class="page-item">
                 {% if action_log.has_previous %}
                 <a class="page-link" href="?page={{ action_log.previous_page_number }}">
@@ -31,14 +24,13 @@
                 </a>
                 {% endif %}
             </li>
-            {% if action_log.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ action_log.next_page_number }}">
                 <span aria-hidden="true">Older actions &raquo;</span>
                 </a>
             </li>
-            {% endif %}
         </ul>
     </nav>
+    {% endif %}
 </div>
 {% endblock content %}

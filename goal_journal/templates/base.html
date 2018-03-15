@@ -20,6 +20,9 @@
     <!-- Your stuff: Third-party CSS libraries go here -->
     <link href="{% static 'css/bootstrap-datepicker3.standalone.min.css' %}" rel="stylesheet">
 
+    <!-- Bootstrap admin theme: https://github.com/BootstrapDash/StarAdmin-Free-Bootstrap-Admin-Template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
     {% endblock %}
@@ -40,14 +43,17 @@
             {% if request.user.is_authenticated %}
             {% if request.user.goal_set.count %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'goals:goal_list' %}">Goals</a>
+                <a class="nav-link pr-3" href="{% url 'goals:new_goal' %}"><i class="far fa-plus-square fa-2x"></i> <span class="d-md-none pl-2">Add new goal</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'journal:goal_journal' %}">Journal</a>
+                <a class="nav-link pr-3" href="{% url 'goals:goal_list' %}"><i class="fas fa-list-ul fa-2x"></i> <span class="d-md-none pl-2">All goals</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3" href="{% url 'journal:goal_journal' %}"><i class="fas fa-book fa-2x"></i> <span class="d-md-none pl-2">Goal journal</span></a>
             </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign out" %}</a>
+                <a class="nav-link" href="{% url 'account_logout' %}"><i class="fas fa-sign-out-alt fa-2x"></i> <span class="d-md-none pl-2">Sign out</span></a>
             </li>
             {% else %}
                 <li class="nav-item">
@@ -70,11 +76,13 @@
 
     <div class="container mt-4">
 
+      {% block messages %}
       {% if messages %}
           {% for message in messages %}
               <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
           {% endfor %}
       {% endif %}
+      {% endblock %}
 
       {% block content %}
       {% endblock content %}
@@ -82,43 +90,6 @@
     </div> <!-- /container -->
 
     {% block modal %}{% endblock modal %}
-    <footer class="text-white mt-4">
-    <div class="container-fluid py-3">
-        <div class="row">
-            <div class="col">
-            <nav class="navbar navbar-expand-md justify-content-center">
-            <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-                <a class="navbar-brand display-4" href="{% url 'goals:goal_list' %}">My Goal Journal</a>
-            </li>
-            {% if request.user.is_authenticated %}
-            {% if request.user.goal_set.count %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'goals:goal_list' %}">Goals</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'journal:goal_journal' %}">Journal</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign out" %}</a>
-            </li>
-            {% else %}
-                <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py#}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py#}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-              </li>
-            {% endif %}
-        </ul>
-            </nav>
-            </div>
-        </div>
-    </div>
-    </footer>
 
     <!-- Le javascript
     ================================================== -->
@@ -132,6 +103,11 @@
       <!-- Your stuff: Third-party javascript libraries go here -->
       <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
       <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+      <!-- Chart.js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+      <!-- random color generator -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
       <!-- place project specific Javascript in this file -->
       <script src="{% static 'js/project.js' %}"></script>
 

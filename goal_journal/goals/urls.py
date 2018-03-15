@@ -16,4 +16,9 @@ urlpatterns = [
     url(r'^(?P<goal_pk>\d+)/actions/(?P<action_pk>\d+)/delete/$', views.delete_action_view, name='delete_action'),
     url(r'^(?P<goal_pk>\d+)/action-log-list/$', views.action_log_list_view, name='action_log_list'),
     url(r'^(?P<goal_pk>\d+)/action-log/$', views.action_log_view, name='action_log'),
+    url(
+        r'^(?P<goal_pk>\d+)/action-log/(?P<action_log_pk>\d+)/delete/$',
+        views.delete_action_log_view,
+        name='delete_action_log'
+    ),
 ]

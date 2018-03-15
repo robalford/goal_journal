@@ -5,7 +5,7 @@ from goal_journal.users.models import User
 
 
 class Entry(models.Model):
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE, null=True)
     progress = models.TextField()
     date_of_entry = models.DateTimeField(auto_now_add=True)
 

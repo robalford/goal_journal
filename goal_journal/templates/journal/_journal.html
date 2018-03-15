@@ -1,8 +1,10 @@
 {% load bootstrap4 %}
-<h5 class="card-title">Progress Journal <a href="#" data-toggle="modal" data-target="#newEntryModal"><i class="far fa-plus-square"></i></a></h5>
+
+<h5 class="card-title pl-3">New journal entry <a href="#" data-toggle="modal" data-target="#newEntryModal"><i class="far fa-plus-square"></i></a></h5>
+
 <!-- Journal entry modal -->
 <div class="modal fade" id="newEntryModal" tabindex="-1" role="dialog" aria-labelledby="newEntryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="entryModalLabel">Progress Journal for {% now 'M d\, Y' %}</h5>
@@ -12,9 +14,8 @@
       </div>
       <div class="modal-body">
         <h3 class="card-title pt-2">Journal Entry</h3>
-        <form method="post" action="{% url 'journal:new_entry' %}">{% csrf_token %}
-            {% bootstrap_field entry_form.goal %}
-            {% bootstrap_field entry_form.progress show_label=False %}
+        <form method="post" action="{% url 'journal:new_entry' goal_pk=goal.id %}">{% csrf_token %}
+            {% bootstrap_form entry_form show_label=False %}
             <button type="submit" class="btn btn-primary btn-sm">Save Journal Entry</button>
         </form>
       </div>
@@ -22,10 +23,14 @@
   </div>
 </div>
 {% if goal.entry_set.count %}
+<ul class="list-group list-group-flush">
 {% for entry in goal.entry_set.all %}
-    <a href="{% url 'journal:edit_entry' entry_pk=entry.pk %}"><h3 class="card-title pt-2">{{ entry.date_of_entry }}</h3></a>
+    <li class="list-group-item">
+    <a href="{% url 'journal:edit_entry' entry_pk=entry.pk %}"><h5 class="card-title pt-2">{{ entry.date_of_entry }}</h5></a>
     {{ entry.progress|linebreaks }}
+    </li>
 {% endfor %}
+</ul>
 {% else %}
 Click on the plus icon above to create your first entry in your progress journal.
 {% endif %}

@@ -101,7 +101,7 @@ class GoalTestCase(TestCase):
     def test_user_can_create_new_goal(self):
         self.client.force_login(self.user)
         response = self.client.get(self.new_goal_url)
-        self.assertContains(response, 'Set a new goal for yourself')
+        self.assertContains(response, 'Set a new goal')
         response = self.client.post(self.new_goal_url, self.new_goal_data, follow=True)
         self.assertContains(response, 'You set a new goal! Start tracking your progress by recording your actions below.')
         self.assertContains(response, self.new_goal_data['goal'])
@@ -109,7 +109,7 @@ class GoalTestCase(TestCase):
     def test_user_can_create_new_category(self):
         self.client.force_login(self.user)
         response = self.client.get(self.new_goal_url)
-        self.assertContains(response, 'Set a new goal for yourself')
+        self.assertContains(response, 'Set a new goal')
         response = self.client.post(self.new_category_url, {'category': 'Mountain climbing'}, follow=True)
         self.assertContains(response, 'Mountain climbing')
 
@@ -227,24 +227,25 @@ class ActionLogFrontEndTest(LiveServerTestCase):
         self.browser.find_element_by_css_selector('button.btn.btn-primary').click()
         Select(self.browser.find_element_by_id("id_form-0-action_status")).select_by_visible_text('Success!')
         action_logged = ActionLog.objects.latest('status_logged')
-        self.assertIn('<div id="action-{}-success-update" class="action-success-update ml-2 col-xs-10">'
-                      '<h2><span class="badge badge-success">Success!</span></h2> </div>'.format(action_logged.action.pk),
+        self.assertIn('<div id="action-{}-log"><p>\n    '
+                      '<span class="badge badge-pill badge-success">Success!</span>'.format(action_logged.action.pk),
                       self.browser.page_source)
-        self.assertIn(action_logged.status_logged.astimezone(TZ).strftime('%b. %-d, %Y, %-I:%M'),
+        self.assertIn(action_logged.status_logged.astimezone(TZ).strftime('%b. %-d, %Y %-I:%M'),
                       self.browser.page_source)
         Select(self.browser.find_element_by_id("id_form-1-action_status")).select_by_visible_text('WIP')
         action_logged = ActionLog.objects.latest('status_logged')
-        self.assertIn('<div id="action-{}-success-update" class="action-success-update ml-2 col-xs-10">'
-                      '<h2><span class="badge badge-warning">WIP</span></h2> </div>'.format(action_logged.action.pk),
+        self.assertIn('<div id="action-{}-log"><p>\n    '
+                      '<span class="badge badge-pill badge-warning">WIP</span>'.format(action_logged.action.pk),
                       self.browser.page_source)
-        self.assertIn(action_logged.status_logged.astimezone(TZ).strftime('%b. %-d, %Y, %-I:%M'),
+        self.assertIn(action_logged.status_logged.astimezone(TZ).strftime('%b. %-d, %Y %-I:%M'),
                       self.browser.page_source)
         Select(self.browser.find_element_by_id("id_form-2-action_status")).select_by_visible_text('Fail')
         action_logged = ActionLog.objects.latest('status_logged')
-        self.assertIn('<div id="action-{}-success-update" class="action-success-update ml-2 col-xs-10">'
-                      '<h2><span class="badge badge-danger">Fail</span></h2> </div>'.format(action_logged.action.pk),
+        self.assertIn('<div id="action-{}-log"><p>\n    '
+                      '<span class="badge badge-pill badge-danger">Fail</span>'.format(action_logged.action.pk),
                       self.browser.page_source)
-        self.assertIn(action_logged.status_logged.astimezone(TZ).strftime('%b. %-d, %Y, %-I:%M'),
+        self.assertIn(action_logged.status_logged.astimezone(TZ).strftime('%b. %-d, %Y %-I:%M'),
                       self.browser.page_source)
+
 
 

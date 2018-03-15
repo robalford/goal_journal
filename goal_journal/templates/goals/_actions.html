@@ -1,35 +1,40 @@
 {% load bootstrap4 %}
-<h5 class="card-title">Actions <a data-toggle="collapse" href="#collapseActionForm" role="button" aria-expanded="false" aria-controls="collapseActionForm"><i class="far fa-plus-square"></i></a></h5>
-<div class="collapse" id="collapseActionForm">
-<p>What actions will you take achieve your goal?</p>
-<form method="post" action="{% url 'goals:new_action' goal.id %}">{% csrf_token %}
-{% bootstrap_formset action_formset show_label=False %}
-<button type="submit" class="btn btn-primary btn-sm mb-4">
-    Save
-</button>
-</form>
-</div>
+<h5 class="card-title pl-3">Add more actions <small><a data-toggle="collapse" href="#collapseActionForm" role="button" aria-expanded="false" aria-controls="collapseActionForm"><i class="far fa-plus-square"></i></a></small></h5>
+    <div class="collapse" id="collapseActionForm">
+        <p>What actions will you take achieve your goal?</p>
+        <form method="post" action="{% url 'goals:new_action' goal.id %}">{% csrf_token %}
+        {{ action_formset.management_form }}
+        {% for action_form in action_formset %}
+        {% bootstrap_form action_form show_label=False %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-sm mb-4">
+            Save
+        </button>
+        </form>
+    </div>
 <form method="post" action="{% url 'goals:action_log' goal.pk %}" class="mb-4" id="action-log-formset">{% csrf_token %}
     {{ action_log_formset.management_form }}
-    <ul class="list-group mb-4">
+    <ul class="list-group list-group-flush mb-4">
     {% for action in active_actions %}
     {% for form in action_log_formset %}
         {% if action.id == form.initial.action %}
-        <li class="list-group-item list-group-item-success">
-            <a href="{% url 'goals:manage_action' goal_pk=goal.pk action_pk=form.initial.action %}">
+        <li class="list-group-item">
+            <div class="row">
+            <div class="col-md-9">
+            <h5><a href="{% url 'goals:manage_action' goal_pk=goal.pk action_pk=form.initial.action %}">
                 {{ action }} {% if action.goals.count > 1 %}({{ action.goals.count }} goals){% endif %}
-            </a>
-            <br><br>
+            </a></h5>
+            </div>
+            <div class="col-md-3">
             {% if action.action_completed %}
                 <h5><span class="badge badge-success">Action Completed!</span></h5>
             {% else %}
-            <div class="row pl-3">
-                <div class="col-xs-2">
-                    {% bootstrap_form form show_label=False %}
-                </div>
-                <div id="action-{{ action.id }}-success-update" class="action-success-update ml-2 col-xs-10"></div>
-            </div>
+                {% bootstrap_form form show_label=False form_group_class='form-group take-action-select' %}
             {% endif %}
+            </div>
+            </div>
+
+            <div id="action-{{ action.id }}-log"></div>
         </li>
         {% endif %}
     {% endfor %}

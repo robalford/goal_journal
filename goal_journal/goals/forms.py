@@ -16,10 +16,8 @@ class GoalForm(forms.ModelForm):
             'categories',
             'target_date',
         ]
-        help_texts = {
-            'categories': "Add one or more categories such as 'Health' or 'Work' to track your overall progress in "
-                          "this aspect of your life.",
-            'target_date': 'Leave this field blank for ongoing goals.',
+        widgets = {
+            'goal': forms.Textarea(attrs={'rows': 4}),
         }
 
 
@@ -47,7 +45,7 @@ class ActionForm(forms.ModelForm):
 
 ActionFormSet = forms.modelformset_factory(Action,
                                            fields=('action', ),
-                                           widgets={'action': forms.TextInput},
+                                           widgets={'action': forms.Textarea(attrs={'rows': 4})},
                                            extra=3)
 
 
@@ -60,3 +58,4 @@ class ActionLogForm(forms.ModelForm):
             'action_status',
         ]
         widgets = {'action': forms.HiddenInput}
+

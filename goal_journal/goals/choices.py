@@ -3,8 +3,11 @@ WIP = 5
 SUCCESS = 10
 
 ACTION_STATUS = (
-    (None, 'Rate your progress'),
+    (None, 'Take action'),
     (FAIL, 'Fail'),
     (WIP, 'WIP'),
     (SUCCESS, 'Success!'),
 )
+
+
+

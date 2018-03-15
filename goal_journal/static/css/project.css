@@ -1,22 +1,3 @@
-/* These styles are generated from project.scss. */
-
-.alert-debug {
-  color: black;
-  background-color: white;
-  border-color: #d6e9c6;
-}
-
-.alert-error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
-}
-
-.badge-info {
-  color: #fff;
-  background-color: #17a2b8a1;
-}
-
 /* Display django-debug-toolbar.
    See https://github.com/django-debug-toolbar/django-debug-toolbar/issues/742
    and https://github.com/pydanny/cookiecutter-django/issues/317
@@ -27,107 +8,73 @@
 
 /* Custom CSS */
 
-body {
-  background-color: #A0DDE5;
+.form-control {
+  font-size: 14px;
 }
 
-a {
-  color: rgba(0,0,0,.9);
+/* Goal Scores. Adapted from here: https://bootsnipp.com/snippets/featured/round-icon-badges */
+
+.goal-score {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  background-color: transparent;
+  text-align: center;
+  -webkit-box-shadow: 0px 0px 0px 3px #08D419;
+  -moz-box-shadow: 0px 0px 0px 3px #08D419;
+  box-shadow: 0px 0px 0px 3px #08D419;
 }
 
-a.danger {
-  color: #dc3545;
+.goal-score-success {
+  color: #08D419;
+  -webkit-box-shadow: 0px 0px 0px 3px #08D419;
+  -moz-box-shadow: 0px 0px 0px 3px #08D419;
+  box-shadow: 0px 0px 0px 3px #08D419;
 }
 
-a.success {
-  color: #42A129;
+.goal-score-warning {
+  color: #FFC105;
+  -webkit-box-shadow: 0px 0px 0px 3px #FFC105;
+  -moz-box-shadow: 0px 0px 0px 3px #FFC105;
+  box-shadow: 0px 0px 0px 3px #FFC105;
 }
 
-.btn-success {
-    color: #fff;
-    background-color: #54C968;
-    border-color: #7BDF8C;
+.goal-score-danger {
+  color: #FF0017;
+  -webkit-box-shadow: 0px 0px 0px 3px #FF0017;
+  -moz-box-shadow: 0px 0px 0px 3px #FF0017;
+  box-shadow: 0px 0px 0px 3px #FF0017;
 }
 
-.alert-error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
-}
-
-.badge-info {
-  color: #fff;
-  background-color: #17a2b8a1;
-}
-
-/* Cards */
-
-.card {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: 0;
-}
-
-.card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    border: 1px solid rgba(0,0,0,.08);
-}
-
-/* Lists */
-
-.list-group-item {
-    position: relative;
-    display: block;
-    padding: .75rem 1.25rem;
-    margin-bottom: -1px;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: 0;
-}
-
-.list-group-item:first-child {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-
-.list-group-item:last-child {
-    margin-bottom: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-/* Navs */
-
-.bg-dark {
-  background-color: #44a2b1!important;
-}
-
-.bg-light {
-  border: 1px solid rgba(0,0,0,.125);
-}
-
-/* Pills */
-
-.small-pill {
-    font-size: 14px;
-    padding: .5rem;
-}
-
-/* Goal list nav for filters */
+/* Goal List */
 
 #goal-list-filters {
-  width: 100%;
+  margin-bottom: -17px;
 }
 
-/* Home page */
+/* Goal detail */
+
+#show-all-goals {
+  font-size: 12px;
+}
+
+.take-action-select > select {
+  border-color: #1a90eb;
+  color: #1a90eb;
+  font-size: 14px;
+}
+
+.take-action-select > select:focus {
+  border-color: #1a90eb;
+  color: #1a90eb;
+  font-size: 14px;
+}
+
+
+/* Home Page */
 
 .home-page-jumbotron {
   background-color: #252425;

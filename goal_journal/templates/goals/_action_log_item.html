@@ -1,7 +1,29 @@
 <li class="list-group-item">
-    <span class="badge badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span>
-    <br>
-    {{ action_recorded.status_logged }}
-    <br>
-    <a href="{% url 'goals:manage_action' goal_pk=goal.pk action_pk=action_recorded.action.pk %}">{{ action_recorded.action }}</a>
+<p>
+    <span class="badge badge-pill badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span>
+    {{ action_recorded.status_logged|date:"D. M. d, Y P"  }} <a href="#" data-toggle="modal" data-target="#deleteActionLogModal"><i class="fas fa-times-circle text-danger"></i></a>
+</p>
+<a href="{% url 'goals:manage_action' goal_pk=goal.pk action_pk=action_recorded.action.pk %}">{{ action_recorded.action }}</a>
 </li>
+<!-- Delete Action Log Modal -->
+<div class="modal fade" id="deleteActionLogModal" tabindex="-1" role="dialog" aria-labelledby="deleteActionLogModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Remove Entry From Action Log</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            Are you sure you want to remove this entry from your your action log?
+      </div>
+      <div class="modal-footer">
+        <form method="post" action="{% url 'goals:delete_action_log' goal_pk=goal.pk action_log_pk=action_recorded.pk %}">{% csrf_token %}
+        <button type="button" id="close-modal-button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">Remove Entry From Action Log</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

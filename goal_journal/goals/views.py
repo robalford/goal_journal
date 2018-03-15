@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from goal_journal.journal.forms import EntryForm
 
 from .forms import GoalForm, NewCategoryForm, ActionForm, ActionFormSet, ActionLogForm
-from .models import Category, Goal, Action, ActionLog
+from .models import Category, Goal, Action, ActionLog, GoalScore
 
 
 @login_required
@@ -21,12 +21,17 @@ def goals_list_view(request, category_pk=None):
         category = get_object_or_404(Category, pk=category_pk)
         goals = goals.filter(categories=category)
         context['category'] = category
-    current_goals = goals.filter(goal_achieved=False)
     achieved_goals = goals.filter(goal_achieved=True)
+    current_goals = goals.filter(goal_achieved=False)
+    untracked_goals = current_goals.filter(goalscore__isnull=True)
+    tracked_goals = current_goals.exclude(goalscore__isnull=True)
+    # Order by current_score @property
+    tracked_goals = sorted(tracked_goals, key=lambda g: g.current_score, reverse=True)
     categories = Category.objects.filter(user=request.user)
     context.update({
         'categories': categories,
-        'current_goals': current_goals,
+        'untracked_goals': untracked_goals,
+        'tracked_goals': tracked_goals,
         'achieved_goals': achieved_goals,
     })
     return render(request, template_name='goals/goal_list.html', context=context)
@@ -35,19 +40,37 @@ def goals_list_view(request, category_pk=None):
 @login_required
 def goal_detail_view(request, goal_pk):
     goal = get_object_or_404(Goal, pk=goal_pk, user=request.user)
+    goal_scores = GoalScore.objects.filter(goal=goal)
     active_actions = Action.objects.filter(goals=goal, action_completed=False)
+    # set priority on action instances to length of queryset for actions with NULL priority values for sorting.
+    # but don't save to db
+    for action in active_actions:
+        if not action.priority:
+            action.priority = len(active_actions)
+    active_actions = sorted(active_actions, key=lambda a: a.priority)
     ActionLogFormSet = modelformset_factory(ActionLog, form=ActionLogForm, extra=goal.actions.count())
     action_log_formset = ActionLogFormSet(queryset=ActionLog.objects.none(), initial=[
         {'action': action.pk} for action in goal.actions.all()])
-    action_log = ActionLog.objects.filter(action__in=goal.actions.all())[:5]
+    action_log = ActionLog.objects.filter(action__goals=goal)[:5]
+    goals = Goal.objects.filter(user=request.user)
+    goals = goals.exclude(goalscore__isnull=True)
+    goals = goals.exclude(pk=goal.pk)
     context = {
         'goal': goal,
-        'entry_form': EntryForm(user=request.user, initial={'goal': goal.id}),
+        'goal_scores': goal_scores,
+        'entry_form': EntryForm(),
         'active_actions': active_actions,
         'action_formset': ActionFormSet(queryset=Action.objects.none()),
         'action_log_formset': action_log_formset,
         'action_log': action_log,
+        'goals': goals,
     }
+    # only display chart for goals that have been tracked for over a day
+    if goal.goalscore_set.count():
+        display_chart = (goal.most_recent_action - goal.first_action).days >= 1
+        tracked_for_over_a_week = (goal.most_recent_action - goal.first_action).days > 7
+        context['display_chart'] = display_chart
+        context['tracked_for_over_a_week'] = tracked_for_over_a_week
     return render(request, template_name='goals/goal_detail.html', context=context)
 
 
@@ -208,7 +231,7 @@ def manage_action_view(request, action_pk, goal_pk):
 
 @login_required
 @require_POST
-def delete_action_view(request, action_pk, goal_pk):
+def delete_action_view(request, goal_pk, action_pk):
     goal = get_object_or_404(Goal, pk=goal_pk, user=request.user)
     action = get_object_or_404(Action, pk=action_pk, user=request.user)
     action.delete()
@@ -252,10 +275,20 @@ def action_log_view(request, goal_pk):
         if action_log.action_status is not None:
             action_log.save()
             break  # we only update one action on the formset at a time
+    score = goal.calculate_goal_score()
+    goal.refresh_from_db()
     data = {
         'action_id': action_log.action.pk,
+        'goal_score': str(goal.current_score),
+        'score_calculated_at': score.calculated_at,
+        'success_range_class': goal.get_success_range_class(),
         'action_status': action_log.get_action_status_display(),
         'action_status_class': action_log.get_action_status_class(),
+        'action_logged': render_to_string(
+            'goals/_action_logged.html',
+            {'action_recorded': action_log},
+            request=request
+        ),
         'action_log_entry': render_to_string(
             'goals/_action_log_item.html',
             {'action_recorded': action_log, 'goal': goal},
@@ -263,4 +296,16 @@ def action_log_view(request, goal_pk):
         ),
     }
     return JsonResponse(data)
+
+
+@login_required
+@require_POST
+def delete_action_log_view(request, goal_pk, action_log_pk):
+    action_log = get_object_or_404(ActionLog, pk=action_log_pk, action__user=request.user)
+    action_log.delete()
+    messages.success(request, "You deleted the entry '{}' for '{}' on {} from your action log.".format(
+        action_log.get_action_status_display(), action_log.action.action,
+        action_log.status_logged.strftime('%b. %-d, %Y, %-I:%M'))
+    )
+    return redirect('goals:goal_detail', goal_pk=goal_pk)
 

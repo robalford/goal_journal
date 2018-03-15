@@ -6,13 +6,11 @@
         {% bootstrap_messages %}
     </div>
     <div class="card mb-4">
-      <div class="card-header">
-          <h3 class="card-title pt-2">Edit journal entry for {{ entry.goal }}</h3>
-      </div>
       <div class="card-body">
-          <h5 class="card-text">{{ entry.date_of_entry }}</h5>
-          {% bootstrap_field entry_form.goal %}
-          {% bootstrap_field entry_form.progress show_label=False %}
+          <h3 class="card-title pt-2">Edit journal entry for {{ entry.goal }}</h3>
+          <hr>
+          <p class="card-text">{{ entry.date_of_entry }}</p>
+          {% bootstrap_form entry_form show_label=False %}
           <!-- Button trigger delete action modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteEntryModal">
               Delete Entry

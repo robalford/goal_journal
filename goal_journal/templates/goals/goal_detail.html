@@ -1,74 +1,213 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block content %}
-<div class="card mb-4">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-sm-10 d-flex">
-                <div>
-                    <h4>{{ goal }} <a class="mr-2" href="{% url 'goals:edit_goal' goal.pk %}"><i class="far fa-edit"></i></a></h4>
-                    <p>{% for category in goal.categories.all %}<a href="{% url 'goals:category' category.id %}"><span class="badge badge-info">{{ category }}</span></a> {% endfor %}</p>
-                    {% if goal.target_date %}<p class="text-muted"><i class="far fa-calendar-check"></i> {{ goal.target_date }}</p>{% endif %}
-                </div>
+<div class="row">
+    <div class="col-lg-10 d-flex">
+        <div class="mr-4 goal-score-container">
+            {% if goal.current_score or goal.current_score == 0 %}
+            <div class="goal-score goal-score-{{ goal.get_success_range_class }}">{{ goal.current_score }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <h3>{{ goal }} <small><a class="mr-2" href="{% url 'goals:edit_goal' goal.pk %}"><i class="far fa-edit"></i></a></small></h3>
+            <p class="text-muted"><i class="far fa-calendar-check"></i> {% if goal.target_date %}{{ goal.target_date }}{% else %}Ongoing{% endif %}</p>
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <form method="post" action="{% url 'goals:goal_achieved' pk=goal.pk %}">{% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-block mt-2 mt-lg-0">Goal Achieved</button>
+        </form>
+    </div>
+</div>
+
+<ul class="nav nav-tabs mt-4 mr-md-auto" id="pills-tab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active small-pill" id="pills-actions-tab" data-toggle="pill" href="#pills-actions" role="tab" aria-controls="pills-actions" aria-selected="true">Actions</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link small-pill" id="pills-journal-tab" data-toggle="pill" href="#pills-journal" role="tab" aria-controls="pills-journal" aria-selected="true">Journal</a>
+    </li>
+    {% if display_chart %}
+    <li class="nav-item">
+        <a class="nav-link small-pill" id="pills-progress-tab" data-toggle="pill" href="#pills-progress" role="tab" aria-controls="pills-progress" aria-selected="true">Progress</a>
+    </li>
+    {% endif %}
+</ul>
+
+<div class="card my-4">
+    <div class="row">
+    <div class="col-md-8">
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-actions" role="tabpanel" aria-labelledby="pills-actions-tab">
+        {% include 'goals/_actions.html' %}
+        </div>
+        <div class="tab-pane fade" id="pills-journal" role="tabpanel" aria-labelledby="pills-journal-tab">
+        {% include 'journal/_journal.html' %}
+        </div>
+        {% if display_chart %}
+        <div class="tab-pane fade" id="pills-progress" role="tabpanel" aria-labelledby="pills-progress-tab">
+        {% if not tracked_for_over_a_week %}
+            <div class="alert alert-info alert-dismissible">Track your progress over time and compare to other goals by logging your actions every day.</div>
+        {% endif %}
+        <div class="card">
+            <div class="card-body">
+                <canvas id="goalChart" class="mb-4"></canvas>
+                <a id="show-all-goals" class="float-right" data-toggle="collapse" href="#goalSelector" role="button" aria-expanded="false" aria-controls="collapseExample">Compare to other goals</a>
             </div>
-            <div class="col-sm-2">
-                <form method="post" action="{% url 'goals:goal_achieved' pk=goal.pk %}">{% csrf_token %}
-                    <button type="submit" class="btn btn-info">Goal Achieved</button>
+        </div>
+        <div class="collapse" id="goalSelector">
+            <div class="card">
+            <div class="card-body">
+                <form>
+                <div class="form-group clearfix">
+                {% for goal in goals|dictsortreversed:"current_score" %}
+                  <div class="checkbox float-left ml-2">
+                    <label class="form-check-label" for="goal{{ goal.pk }}-check-box">
+                      <input type="checkbox" id="goal{{ goal.pk }}-check-box" class="form-check-input">
+                      {{ goal }} ({{ goal.current_score }})
+                    </label>
+                  </div>
+                {% endfor %}
+                </div>
                 </form>
             </div>
-        </div>
-    </div>
-    <div class="card-header">
-        <ul class="nav nav-pills" id="pills-tab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active small-pill" id="pills-tracker-tab" data-toggle="pill" href="#pills-tracker" role="tab" aria-controls="pills-tracker" aria-selected="true">Action Log</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link small-pill" id="pills-journal-tab" data-toggle="pill" href="#pills-journal" role="tab" aria-controls="pills-journal" aria-selected="false">Progress Journal</a>
-          </li>
-        </ul>
-    </div>
-    <div class="card-body">
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-tracker" role="tabpanel" aria-labelledby="pills-tracker-tab">
-                <div class="row mt-4">
-                    <div class="col-md-8">
-                        {% include 'goals/_actions.html' %}
-                    </div>
-                    <div class="col-md-4">
-                        {% include 'goals/_action_log.html' with action_log=action_log %}
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="pills-journal" role="tabpanel" aria-labelledby="pills-journal-tab">
-                <div class="row mt-4">
-                    <div class="col-md-8">
-                        {% include 'journal/_journal.html' %}
-                    </div>
-                    <div class="col-md-4">
-                        {% include 'goals/_action_log.html' with action_log=action_log %}
-                    </div>
-                </div>
             </div>
         </div>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+    <div class="col-md-4">
+        {% include 'goals/_action_log.html' %}
+    </div>
     </div>
 </div>
 
 {% endblock %}
 
 {% block javascript %}{{ block.super }}
+{% if display_chart %}
+<script>
+var ctx = document.getElementById('goalChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        datasets: [{
+            label: "{{ goal.goal }}",
+            fill: false,
+            borderColor: {% if goal.get_success_range_class == 'success' %}'#08D419'{% elif goal.get_success_range_class == 'warning' %}'#FFC105'{% else %}'#FF0017'{% endif %},
+            data: [
+                {% for score in goal_scores %}
+                    {# only show one score a day for longer running goals #}
+                    {% if tracked_for_over_a_week %}
+                        {% ifchanged score.calculated_at.day %}
+                        {
+                            x: new Date('{{ score.calculated_at|date:'o-m-d' }}'),
+                            y: {{ score.score }}
+                        },
+                        {% else %}{% endifchanged %}
+                    {% else %}
+                        {# only show one score per hour for shorter running goals #}
+                        {% ifchanged score.calculated_at.hour %}
+                        {
+                            x: new Date('{{ score.calculated_at|date:'c' }}'),
+                            y: {{ score.score }}
+                        },
+                        {% else %}{% endifchanged %}
+                    {% endif %}
+                {% endfor %}
+            ],
+        },
+        {% for goal in goals %}
+            {
+            label: "{{ goal.goal }}",
+            hidden: true,
+            fill: false,
+            borderColor: {% if goal.get_success_range_class == 'success' %}'#08D419'{% elif goal.get_success_range_class == 'warning' %}'#FFC105'{% else %}'#FF0017'{% endif %},
+            backgroundColor: '#fff',
+            data: [
+                {% for score in goal.goalscore_set.all %}
+                    {% ifchanged score.calculated_at.day and tracked_for_over_a_week%}
+                    {
+                        x: new Date('{{ score.calculated_at|date:'o-m-d' }}'),
+                        y: {{ score.score }}
+                    },
+                    {% else %}
+                    {% endifchanged %}
+                {% endfor %}
+            ]
+            },
+            {% endfor %}
+        ]
+    },
+
+    // Configuration options go here
+    options: {
+        legend: {
+            display: false
+        },
+        scales: {
+            xAxes: [{
+                type: 'time',
+                distribution: 'series',
+                time: {
+                    unit: 'week',
+                }
+            }]
+        }
+    }
+});
+</script>
+{% endif %}
 <script>
 $(function () {
+    {% if display_chart %}
+    {# Add goals to chart when check box is selected #}
+    {% for goal in goals %}
+        $("#goal{{ goal.pk }}-check-box").on('change', function () {
+            if (this.checked) {
+                var lineColor = randomColor();
+                chart.data.datasets.forEach(function(goalData) {
+                    if (goalData['label'] === '{{ goal.goal }}') {
+                        goalData['borderColor'] = lineColor;
+                        goalData['hidden'] = false;
+                    }
+                });
+                $(this).parent().css('color', lineColor);
+                chart.update();
+            }
+            else {
+                chart.data.datasets.forEach(function(goalData) {
+                    if (goalData['label'] === '{{ goal.goal }}') {
+                        goalData['hidden'] = true;
+                    }
+                });
+                $(this).parent().css('color', '#212529');
+                chart.update();
+            }
+        });
+    {% endfor %}
+    {% endif %}
+    {# Action log AJAX #}
     var $actionLogFormset = $('#action-log-formset');
     $actionLogFormset.on('change', function() {
         var actionLog = $actionLogFormset.serialize();
         $.post('{% url 'goals:action_log' goal.pk %}', actionLog, function(data) {
-            var actionIDSuccessUpdate = "#action-" + data['action_id'] + "-success-update";
-            $(actionIDSuccessUpdate).html(
-                '<h2><span class="badge badge-' + data['action_status_class'] + '">' + data['action_status'] + '</span></h3> '
+            $('.goal-score-container').html(
+                '<div class="goal-score goal-score-' + data['success_range_class'] + '">' + data['goal_score'] + '</div>'
             );
             $("select").val($("select option:first").val());  // reset select fields
-            $(".action-log-list").prepend(data['action_log_entry']);
+            $('.action-log-list').prepend(data['action_log_entry']);
+            var actionIDLog = "#action-" + data['action_id'] + "-log";
+            $(actionIDLog).html(data['action_logged']);
+            {% if display_chart %}
+            // update the chart
+            chart.data.datasets[0].data.push({x: new Date(data['score_calculated_at']), y:data['goal_score']});
+            chart.update();
+            {% endif %}
         });
     });
 });

@@ -25,7 +25,7 @@ class JournalEntryTestCase(TestCase):
                     i, goal.goal)
                 )
                 entry.save()
-        self.new_entry_url = reverse('journal:new_entry')
+        self.new_entry_url = reverse('journal:new_entry', args=[self.existing_goal.pk])
         self.user_entries = Entry.objects.filter(goal__user=self.user)
         self.other_user_entries = Entry.objects.filter(goal__user=self.other_user)
         self.new_entry_data = {
@@ -42,14 +42,6 @@ class JournalEntryTestCase(TestCase):
         response = self.client.post(self.new_entry_url, self.new_entry_data, follow=True)
         self.assertContains(response, 'You created a new entry in your goal journal.')
         self.assertContains(response, self.new_entry_data['progress'])
-
-    def test_create_new_journal_entry_from_goal_detail(self):
-        self.client.force_login(self.user)
-        response = self.client.get(reverse('goals:goal_detail', args=[self.existing_goal.pk]))
-        for user_goal in self.user_goals:
-            self.assertContains(response, '<option value="{}"'.format(user_goal.pk))
-        for other_user_goal in self.other_user_goals:
-            self.assertNotContains(response, '<option value="{}"'.format(other_user_goal.pk))
 
     def test_edit_entry(self):
         entry = self.existing_goal.entry_set.last()
@@ -81,14 +73,6 @@ class JournalEntryTestCase(TestCase):
         for other_user_entry in self.other_user_entries:
             self.assertNotContains(response, '<a href="/goal-journal/entry/{}/edit/">'.format(other_user_entry.pk))
 
-    def test_journal_list_goal_filter(self):
-        self.client.force_login(self.user)
-        response = self.client.get(reverse('journal:goal_filter', args=[self.existing_goal.pk]))
-        for entry in Entry.objects.filter(goal__user=self.user):
-            if entry.goal == self.existing_goal:
-                self.assertContains(response, entry.progress)
-            else:
-                self.assertNotContains(response, entry.progress)
 
 
 

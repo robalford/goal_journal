@@ -3,11 +3,9 @@
 {% block content %}
 <form method="post" action="">{% csrf_token %}
     <div class="card mb-4">
-      <div class="card-header">
-          <h3 class="card-title pt-2">{% if edit %}Edit goal{% else %}Set a new goal for yourself{% endif %}</h3>
-          {% bootstrap_field goal_form.goal placeholder='' show_label=False %}
-      </div>
       <div class="card-body">
+        <h5 class="card-title">{% if edit %}Edit goal{% else %}Set a new goal{% endif %}</h5>
+          {% bootstrap_field goal_form.goal placeholder='' show_label=False %}
         <h5 class="card-text mb-2">Target date:</h5>
         <div class="form-group">
             <label class="sr-only" for="id_target_date">Target date</label>
@@ -18,16 +16,23 @@
         <div id="category-field">
         {% bootstrap_field goal_form.categories show_label=False %}
         </div>
+        <p>Add one or more categories to track your overall progress in this aspect of your life.</p>
         <!-- Button trigger category modal -->
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newCategoryModal">
+        <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#newCategoryModal">
           Create new category
         </button>
         <br><br>
         <h5 class="card-text mt-3">Actions</h5>
         <p>What actions will you take to achieve your goal?</p>
         <div id="action-forms">
-        {% bootstrap_formset action_formset show_label=False  %}
+        {{ action_formset.management_form }}
+        {% for action_form in action_formset %}
+        <div class="action-form">
+        {% bootstrap_form action_form show_label=False  %}
         </div>
+        {% endfor %}
+        </div>
+        <a href="#" id="add-another-action">Add another action</a>
     </div>
       <div class="card-header">
         {% if edit %}
@@ -67,7 +72,7 @@
 </div>
 
 {% if edit %}
-<!-- Delete Action Modal -->
+<!-- Delete Goal Modal -->
 <div class="modal fade" id="deleteGoalModal" tabindex="-1" role="dialog" aria-labelledby="deleteGoalModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -110,6 +115,37 @@ $(function () {
             });
         });
         $("#close-modal-button").click();
+    });
+    // Add new action forms to formset
+    var $addAnotherAction = $("#add-another-action");
+    $addAnotherAction.on('click', function(e) {
+        e.preventDefault();
+        var $totalForms = $("#id_actions-TOTAL_FORMS");
+        var $lastForm = $("#action-forms > [class='action-form']:last");
+        var $newForm = $lastForm.clone(true);
+        // forms in formset are numbered starting at 0, so id, name and for attrs will always be one less than the
+        // total number of attendee forms displayed
+        var lastFormNumber = ($totalForms.val() - 1).toString();
+        var newFormNumber = $totalForms.val();
+        // replace lastFormNumber with newFormNumber in id, name and for attrs of the cloned forms
+        $newForm.find(':input').each(function () {
+            var name = $(this).attr('name').replace('-' + lastFormNumber + '-', '-' + newFormNumber + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id});
+            // reset empty form values for cloned form fields
+            $(this).val('');
+        });
+        $newForm.find('label').each(function () {
+            var newFor = $(this).attr('for').replace('-' + lastFormNumber + '-', '-' + newFormNumber + '-');
+            $(this).attr('for', newFor);
+        });
+        // add the new form to the DOM
+        $lastForm.after($newForm);
+        // increment the TOTAL_FORMS value on the management form using newFormNumber which will be one less than
+        // the total number of forms in the formset because of zero-based numbering
+        var totalForms = Number(newFormNumber);
+        totalForms++;
+        $totalForms.val(totalForms);
     });
 });
 </script>

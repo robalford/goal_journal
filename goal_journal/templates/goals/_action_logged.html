@@ -1,0 +1,4 @@
+<p>
+    <span class="badge badge-pill badge-{{ action_recorded.get_action_status_class }}">{{ action_recorded.get_action_status_display }}</span>
+    {{ action_recorded.status_logged|date:"D. M. d, Y P"  }}
+</p>

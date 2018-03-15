@@ -1,5 +1,14 @@
 <li class="list-group-item">
-    <a href="{% url 'goals:goal_detail' goal.id %}"><h4>{{ goal }}</h4></a>
-    <p>{% for category in goal.categories.all %}<a href="{% url 'goals:category' category.id %}"><span class="badge badge-info">{{ category }}</span></a> {% endfor %}</p>
-    {% if goal.target_date %}<p class="text-muted"><i class="far fa-calendar-check"></i> {{ goal.target_date }}</p>{% endif %}
+    <div class="d-flex">
+        <div class="mr-4">
+            {% if goal.current_score or goal.current_score == 0 %}
+                <div class="goal-score goal-score-{{ goal.get_success_range_class }}">{{ goal.current_score }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <a href="{% url 'goals:goal_detail' goal.id %}"><h4>{{ goal }}</h4></a>
+{#            <p>{% for category in goal.categories.all %}<a href="{% url 'goals:category' category.id %}"><span class="badge badge-info">{{ category }}</span></a> {% endfor %}</p>#}
+            <p class="text-muted">{% if goal.target_date %}<i class="far fa-calendar-check"></i> {{ goal.target_date }}{% else %}Ongoing{% endif %}</p>
+        </div>
+    </div>
 </li>
