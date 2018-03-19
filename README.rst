@@ -46,7 +46,7 @@ Installation
 Usage
 -----
 
-Sign in to the demo account to view the full set of features: 
+Sign in to the demo account to view the full set of features:
 
 Username: demo_user
 

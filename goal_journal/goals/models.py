@@ -41,10 +41,7 @@ class Goal(models.Model):
 
     def calculate_goal_score(self):
         goal_score = None
-        logged_actions = []
-        for action in self.actions.all():
-            for action_logged in action.actionlog_set.all():
-                logged_actions.append(action_logged.action_status)
+        logged_actions = ActionLog.objects.filter(action__in=self.actions.all()).values_list('action_status', flat=True)
         if logged_actions:
             score = sum(logged_actions) / len(logged_actions)
             goal_score = GoalScore.objects.create(goal=self, score=score)
