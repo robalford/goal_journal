@@ -90,6 +90,10 @@
   color: black;
 }
 
+.btn.btn-outline-light:hover {
+  color: #0faef6;
+}
+
 @media (min-width:992px) {
   .home-page-container {
     margin-top: -250px;
