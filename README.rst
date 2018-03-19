@@ -40,16 +40,16 @@ Installation
     $ python manage.py migrate
     $ python manage.py loaddata users goals journal
     $ python manage.py runserver
-    
+
 6) Point your browser to `http://127.0.0.1:8000/` to get started
 
 Usage
 -----
 
-Log in to the demo account to view the full set of features. From the home page, click on 'Sign In' on the main nav menu
-and enter these credentials:
+Sign in to the demo account to view the full set of features: 
 
 Username: demo_user
+
 Password: demo_password
 
 Set goals for yourself
