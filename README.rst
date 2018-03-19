@@ -35,27 +35,34 @@ Installation
 
     $ createdb goal_journal
 
-5) Run Django migrations and run the local development server::
+5) Run Django migrations, load data for demo version and run the local development server::
 
     $ python manage.py migrate
+    $ python manage.py loaddata users goals journal
     $ python manage.py runserver
-
+    
 6) Point your browser to `http://127.0.0.1:8000/` to get started
 
 Usage
 -----
 
+Log in to the demo account to view the full set of features. From the home page, click on 'Sign In' on the main nav menu
+and enter these credentials:
+
+Username: demo_user
+Password: demo_password
+
 Set goals for yourself
 
-.. image:: docs/images/new_goal.png
+.. image:: docs/images/goal_list.png
 
 Take action to achieve your goals
 
 .. image:: docs/images/goal_detail.png
 
-Keep a goal journal
+Track your progress with goal scores, charts and journal
 
-.. image:: docs/images/journal_entry.png
+.. image:: docs/images/progress_chart.png
 
 Works great on mobile
 
