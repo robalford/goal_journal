@@ -1,0 +1,29 @@
+[
+{
+    "model": "journal.entry",
+    "pk": 52,
+    "fields": {
+        "goal": 11,
+        "progress": "If we save fifty bucks a week we can go to Hawaii",
+        "date_of_entry": "2018-01-31T15:15:33.118Z"
+    }
+},
+{
+    "model": "journal.entry",
+    "pk": 64,
+    "fields": {
+        "goal": 18,
+        "progress": "I am doing really awesome work right now and I totally deserve a promotion",
+        "date_of_entry": "2018-02-07T02:11:19.880Z"
+    }
+},
+{
+    "model": "journal.entry",
+    "pk": 76,
+    "fields": {
+        "goal": 18,
+        "progress": "Today I worked really hard and I think my boss noticed",
+        "date_of_entry": "2018-02-16T05:56:49.313Z"
+    }
+}
+]

@@ -1,0 +1,21 @@
+[
+{
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$c1V2bHBEbkxlajFE$K1LTv2ym+OjjIwYloufo/g",
+        "last_login": "2018-03-19T21:59:11.248Z",
+        "is_superuser": false,
+        "username": "demo_user",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-03-19T21:59:11.135Z",
+        "name": "",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]
