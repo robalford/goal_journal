@@ -16,6 +16,8 @@ from .models import Category, Goal, Action, ActionLog, GoalScore
 @login_required
 def goals_list_view(request, category_pk=None):
     goals = Goal.objects.filter(user=request.user)
+    if not goals:
+        return new_goal_view(request)
     context = {}
     if category_pk:
         category = get_object_or_404(Category, pk=category_pk)
