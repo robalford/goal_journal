@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
     'bootstrap4',  # template tags for generating bootstrap markup
+    'rest_framework',
 ]
 
 # Apps specific for this project go here.

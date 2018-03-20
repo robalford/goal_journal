@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
+    url(r'^api/v1/', include('api.urls', namespace='api')),
     url(r'^goals/', include('goal_journal.goals.urls', namespace='goals')),
     url(r'^goal-journal/', include('goal_journal.journal.urls', namespace='journal')),
 
